@@ -9,4 +9,4 @@ name = input("Enter the student's name: ").strip().lower()
 if name in students_marks:
     print(f"{name}'s marks: {students_marks[name]}")
 else:
-    print("Student not found.")
+    print("Student not found.") 
