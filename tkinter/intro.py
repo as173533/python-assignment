@@ -95,6 +95,17 @@ option1.pack()
 option2 = ttk.Radiobutton(window,text="Female",variable= radio_value, value="female", command=get_radio_value_function)
 option2.pack()
 
+#COMBO BOX
+selected_country = tk.StringVar()
+
+countries = ttk.Combobox(window,textvariable=selected_country, values=["India","China","Japan"])
+countries["state"] = "readonly"
+countries.pack()
+
+def display_country_function(event):
+    print(f"Selected Country: {selected_country.get()}")
+
+countries.bind("<<ComboboxSelected>>",display_country_function)
 
 window.mainloop()
 
