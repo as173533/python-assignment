@@ -4,14 +4,14 @@ from tkinter.constants import YES
 from tkinter import ttk
 
 window = tk.Tk()
-window.title("Calculator")
+window.title("INTRO")
 # window.geometry("500x500")
 window.minsize(300,500)
 # customfont = tfont.Font(family="Times New Roman",size=20,weight="bold",slant="italic",underline=0)
 
 #LABEL
 label = ttk.Label(window,text="Hello World", padding=5)
-label.pack(expand=YES)
+label.pack()
 
 label.config(text="Thank you Again")
 # label.config(font=("Courier New",20))
@@ -19,7 +19,7 @@ label.config(text="Thank you Again")
 #INPUT
 user_input = ttk.Entry(width=35)
 # user_input = ttk.Entry(width=35,show="*")
-user_input.pack(expand=YES)
+user_input.pack()
 
 
 counter = 0
@@ -36,7 +36,7 @@ quiet_button = ttk.Button(window,text="Quit",command=window.destroy)
 quiet_button.pack()
 
 separator = ttk.Separator(window,orient="horizontal")
-separator.pack(fill="x",expand=YES)
+separator.pack(fill="x",)
 
 #TEXT BOX
 text = tk.Text(window, height=3,width=35)
@@ -52,7 +52,7 @@ def text_function():
     print(text_data)
 
 text_button = ttk.Button(window,text="Get text",command=text_function)
-text_button.pack(expand=YES)
+text_button.pack()
 
 
 
@@ -69,7 +69,7 @@ text_button.pack(expand=YES)
 #     enable_button["command"] = enable_text
 #
 # enable_button = ttk.Button(window,text="Enable text",command=enable_text)
-# enable_button.pack(expand=YES)
+# enable_button.pack()
 
 #CHECK BUTTON
 
@@ -106,6 +106,33 @@ def display_country_function(event):
     print(f"Selected Country: {selected_country.get()}")
 
 countries.bind("<<ComboboxSelected>>",display_country_function)
+
+#LISTBOX
+food_items = ("Pizza","Burger","FUCHKA","JILEPI")
+selected_food = tk.StringVar(value=food_items)
+
+food_list = tk.Listbox(listvariable=selected_food,height=3, selectmode="extended")
+food_list.pack()
+
+def display_food_function(event):
+    food_indices = food_list.curselection()
+    for food_index in food_indices:
+        print(food_list.get(food_index))
+
+
+food_list.bind("<<ListboxSelect>>",display_food_function)
+
+#SPINBOX
+def get_spinbox_function():
+    print(spin_box.get())
+
+spinboxcounter = tk.IntVar(value=0)
+# spin_box = ttk.Spinbox(from_=0,to=20,textvariable=spinboxcounter, wrap=True, command=get_spinbox_function)
+# spin_box = ttk.Spinbox(values=(10,15,202,203),textvariable=spinboxcounter, wrap=True, command=get_spinbox_function)
+spin_box = ttk.Spinbox(values=tuple(range(10,200,5)),textvariable=spinboxcounter, wrap=True, command=get_spinbox_function)
+spin_box.pack()
+
+
 
 window.mainloop()
 
