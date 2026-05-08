@@ -1,132 +1,22 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ post.title }}</title>
-    <style>
-        :root {
-            --bg: #f4efe6;
-            --panel: rgba(255, 252, 246, 0.86);
-            --ink: #1f2933;
-            --muted: #5f6c7b;
-            --accent: #c56a2d;
-            --accent-dark: #8d3e14;
-            --border: rgba(31, 41, 51, 0.12);
-            --shadow: 0 24px 60px rgba(31, 41, 51, 0.14);
-        }
+{% extends "base.html" %}
 
-        * {
-            box-sizing: border-box;
-        }
+{% block page_title %}{{ post.title }}{% endblock %}
+{% block body_class %}post-detail-page{% endblock %}
 
-        body {
-            margin: 0;
-            min-height: 100vh;
-            font-family: "Trebuchet MS", "Segoe UI", sans-serif;
-            color: var(--ink);
-            background:
-                radial-gradient(circle at top left, rgba(197, 106, 45, 0.22), transparent 28%),
-                linear-gradient(160deg, #f8f4ed 0%, #efe6d8 45%, #f4efe6 100%);
-        }
-
-        .shell {
-            width: min(860px, calc(100% - 32px));
-            margin: 48px auto;
-        }
-
-        .article {
-            background: var(--panel);
-            border: 1px solid var(--border);
-            border-radius: 28px;
-            padding: 36px;
-            box-shadow: var(--shadow);
-            backdrop-filter: blur(10px);
-        }
-
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 22px;
-            color: var(--accent-dark);
-            text-decoration: none;
-            font-weight: 700;
-        }
-
-        .eyebrow {
-            display: inline-block;
-            padding: 8px 14px;
-            border-radius: 999px;
-            background: rgba(197, 106, 45, 0.12);
-            color: var(--accent-dark);
-            font-size: 0.86rem;
-            font-weight: 700;
-            letter-spacing: 0.04em;
-            text-transform: uppercase;
-        }
-
-        h1 {
-            margin: 18px 0 12px;
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: clamp(2rem, 4vw, 3.3rem);
-            line-height: 1.05;
-        }
-
-        .meta {
-            color: var(--muted);
-            font-size: 0.98rem;
-            margin-bottom: 28px;
-        }
-
-        .summary {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #374553;
-            margin-bottom: 24px;
-        }
-
-        .content {
-            display: grid;
-            gap: 16px;
-        }
-
-        .content p {
-            margin: 0;
-            padding-left: 18px;
-            border-left: 4px solid rgba(197, 106, 45, 0.2);
-            color: #30404d;
-            line-height: 1.85;
-            font-size: 1rem;
-        }
-
-        @media (max-width: 640px) {
-            .shell {
-                width: min(100% - 20px, 860px);
-                margin: 20px auto;
-            }
-
-            .article {
-                padding: 24px;
-                border-radius: 22px;
-            }
-        }
-    </style>
-</head>
-<body>
+{% block body_content %}
     <main class="shell">
         <article class="article">
-            <a class="back-link" href="{{ post.back_url }}">&#8592; Back to all posts</a>
-            <span class="eyebrow">{{ post.category }}</span>
+            <a class="back-link" href="{% url 'allpost' %}">&#8592; Back to all posts</a>
+            <img class="article-image" src="{{ post.image_url }}" alt="{{ post.title }}">
+            <span class="eyebrow"><span class="ui-icon icon-tag" aria-hidden="true"></span>{{ post.category.name }}</span>
             <h1>{{ post.title }}</h1>
-            <p class="meta">{{ post.reading_time }}</p>
+            <p class="meta">By {{ post.author.username }} · {{ post.reading_time }}</p>
             <p class="summary">{{ post.summary }}</p>
             <section class="content">
-                {% for paragraph in post.content %}
+                {% for paragraph in post.content.splitlines %}
                     <p>{{ paragraph }}</p>
                 {% endfor %}
             </section>
         </article>
     </main>
-</body>
-</html>
+{% endblock %}

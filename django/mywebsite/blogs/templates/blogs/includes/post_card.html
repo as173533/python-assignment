@@ -1,0 +1,13 @@
+<a class="post-card" href="{{ post.get_absolute_url }}">
+    <img class="post-card-image" src="{{ post.image_url }}" alt="{{ post.title }}">
+    <div class="post-card-header">
+        <span class="post-category"><span class="ui-icon icon-tag" aria-hidden="true"></span>{{ post.category.name }}</span>
+        <span>{{ post.reading_time }}</span>
+    </div>
+    <h2>{{ post.title }}</h2>
+    <p>{{ post.summary }}</p>
+    <div class="post-card-footer">
+        <span>Read post</span>
+        <span class="arrow">&#8594;</span>
+    </div>
+</a>

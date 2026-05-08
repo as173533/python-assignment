@@ -1,15 +1,57 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blogs</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-<h1>All Blogs</h1>
-<p>Welcome to my Blog home page personal</p>
+{% block page_title %}Blogs{% endblock %}
+{% block body_class %}home-page{% endblock %}
 
-</body>
-</html>
+{% block body_content %}
+    <main class="shell">
+        <section class="home-hero">
+            <div>
+                <span class="eyebrow">Personal Journal</span>
+                <h1>Ideas, notes, and stories in one calm place.</h1>
+                <p>
+                    Welcome to My Blog, a small collection of posts rendered with Django templates
+                    and styled from one global static stylesheet.
+                </p>
+                <div class="hero-actions">
+                    <a class="button-primary" href="{% url 'allpost' %}">Browse posts</a>
+                    {% if user.is_authenticated %}
+                        <a class="button-secondary" href="{% url 'create-post' %}">Write a post</a>
+                    {% else %}
+                        <a class="button-secondary" href="{% url 'login' %}">Login to write</a>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
+        <section class="feature-strip" aria-label="Blog highlights">
+            <div>
+                <span>01</span>
+                <h2>Clean Layout</h2>
+                <p>Readable spacing, stronger contrast, and a responsive page structure.</p>
+            </div>
+            <div>
+                <span>02</span>
+                <h2>Global Static</h2>
+                <p>One project-level stylesheet now controls the shared design.</p>
+            </div>
+            <div>
+                <span>03</span>
+                <h2>Django Ready</h2>
+                <p>Templates stay simple while views provide the dynamic content.</p>
+            </div>
+        </section>
+
+        {% if latest_posts %}
+            <section class="section-heading">
+                <span class="eyebrow">Recently Approved</span>
+                <h2>Fresh from the blog</h2>
+            </section>
+            <section class="post-grid">
+                {% for post in latest_posts %}
+                    {% include "blogs/includes/post_card.html" with post=post only %}
+                {% endfor %}
+            </section>
+        {% endif %}
+    </main>
+{% endblock %}

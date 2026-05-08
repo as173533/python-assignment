@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block page_title %}Dashboard{% endblock %}
+{% block body_class %}dashboard-page{% endblock %}
+
+{% block body_content %}
+    <main class="shell">
+        <section class="dashboard-hero">
+            <div>
+                <span class="eyebrow">Writer Dashboard</span>
+                <h1>Welcome back, {{ user.username }}.</h1>
+                <p>Track your posts, approval progress, writing volume, and category mix.</p>
+            </div>
+            <a class="button-primary" href="{% url 'create-post' %}"><span class="ui-icon icon-write" aria-hidden="true"></span>Write a post</a>
+        </section>
+
+        <section class="stat-grid" aria-label="Post statistics">
+            <div class="stat-card">
+                <span><span class="ui-icon icon-posts" aria-hidden="true"></span>Total Posts</span>
+                <strong>{{ stats.total_posts }}</strong>
+            </div>
+            <div class="stat-card">
+                <span><span class="ui-icon icon-approved" aria-hidden="true"></span>Approved</span>
+                <strong>{{ stats.approved_posts }}</strong>
+            </div>
+            <div class="stat-card">
+                <span><span class="ui-icon icon-pending" aria-hidden="true"></span>Pending</span>
+                <strong>{{ stats.pending_posts }}</strong>
+            </div>
+            <div class="stat-card">
+                <span><span class="ui-icon icon-library" aria-hidden="true"></span>Public Library</span>
+                <strong>{{ stats.public_posts }}</strong>
+            </div>
+            <div class="stat-card">
+                <span><span class="ui-icon icon-rate" aria-hidden="true"></span>Approval Rate</span>
+                <strong>{{ stats.approval_rate }}%</strong>
+            </div>
+            <div class="stat-card">
+                <span><span class="ui-icon icon-words" aria-hidden="true"></span>Total Words</span>
+                <strong>{{ stats.total_words }}</strong>
+            </div>
+            <div class="stat-card">
+                <span><span class="ui-icon icon-average" aria-hidden="true"></span>Avg. Words</span>
+                <strong>{{ stats.average_words }}</strong>
+            </div>
+        </section>
+
+        <section class="analytics-grid">
+            <div class="table-panel">
+                <div class="panel-heading">
+                    <span class="eyebrow">Category Analytics</span>
+                </div>
+                {% if category_counts %}
+                    <div class="category-bars">
+                        {% for category in category_counts %}
+                            <div class="category-bar-row">
+                                <div>
+                                    <strong>{{ category.name }}</strong>
+                                    <span>{{ category.total }} post{{ category.total|pluralize }}</span>
+                                </div>
+                                <div class="bar-track" aria-hidden="true">
+                                    <span style="width: {{ category.percent }}%"></span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="empty-state compact">
+                        <h2>No category data</h2>
+                        <p>Write posts to see analytics here.</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="table-panel insight-panel">
+                <div class="panel-heading">
+                    <span class="eyebrow">Quick Insights</span>
+                </div>
+                <div class="insight-list">
+                    <div>
+                        <span>Waiting for review</span>
+                        <strong>{{ stats.pending_posts }}</strong>
+                    </div>
+                    <div>
+                        <span>Published by you</span>
+                        <strong>{{ stats.approved_posts }}</strong>
+                    </div>
+                    <div>
+                        <span>Average article size</span>
+                        <strong>{{ stats.average_words }} words</strong>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="table-panel">
+            <div class="panel-heading">
+                <span class="eyebrow">Recent Posts</span>
+                <a href="{% url 'allpost' %}">View public posts</a>
+            </div>
+            {% if recent_posts %}
+                <div class="post-table">
+                    {% for post in recent_posts %}
+                        <div class="post-row">
+                            <div>
+                                <strong>{{ post.title }}</strong>
+                                <span>{{ post.category.name }} - {{ post.created_at|date:"M d, Y" }}</span>
+                            </div>
+                            {% if post.is_approved %}
+                                <span class="status approved">Approved</span>
+                            {% else %}
+                                <span class="status pending">Pending</span>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <h2>No posts yet</h2>
+                    <p>Your submitted posts will appear here.</p>
+                </div>
+            {% endif %}
+        </section>
+    </main>
+{% endblock %}

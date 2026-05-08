@@ -1,0 +1,49 @@
+<header class="site-header">
+    <div class="site-header-inner">
+        <nav class="site-nav" aria-label="Main navigation">
+            <a class="site-brand" href="{% url 'home' %}">My Blog</a>
+            <div class="site-nav-links">
+                <a href="{% url 'home' %}"><span class="ui-icon icon-home" aria-hidden="true"></span>Home</a>
+                <a href="{% url 'allpost' %}"><span class="ui-icon icon-posts" aria-hidden="true"></span>All Posts</a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'create-post' %}"><span class="ui-icon icon-write" aria-hidden="true"></span>Write</a>
+                    <div class="account-menu">
+                        <button class="account-trigger" type="button" aria-haspopup="true">
+                            {% if user.profile.avatar %}
+                                <img src="{{ user.profile.avatar_url }}" alt="{{ user.username }}">
+                            {% else %}
+                                <span>{{ user.username|first|upper }}</span>
+                            {% endif %}
+                            <strong>{{ user.username }}</strong>
+                        </button>
+                        <div class="account-dropdown">
+                            <a href="{% url 'dashboard' %}"><span class="ui-icon icon-dashboard" aria-hidden="true"></span>Dashboard</a>
+                            <a href="{% url 'profile' %}"><span class="ui-icon icon-profile" aria-hidden="true"></span>Profile</a>
+                            <a href="{% url 'password_change' %}"><span class="ui-icon icon-password" aria-hidden="true"></span>Change Password</a>
+                            <form class="logout-form" method="post" action="{% url 'logout' %}">
+                                {% csrf_token %}
+                                <button type="submit"><span class="ui-icon icon-logout" aria-hidden="true"></span>Logout</button>
+                            </form>
+                        </div>
+                    </div>
+                {% else %}
+                    <a href="{% url 'login' %}"><span class="ui-icon icon-login" aria-hidden="true"></span>Login</a>
+                {% endif %}
+            </div>
+        </nav>
+
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+            {% if current_page == "Home" %}
+                <span class="breadcrumb-current" aria-current="page">Home</span>
+            {% else %}
+                <a href="{% url 'home' %}">Home</a>
+                <span>/</span>
+                {% if parent_page and parent_url %}
+                    <a href="{{ parent_url }}">{{ parent_page }}</a>
+                    <span>/</span>
+                {% endif %}
+                <span class="breadcrumb-current" aria-current="page">{{ current_page }}</span>
+            {% endif %}
+        </nav>
+    </div>
+</header>

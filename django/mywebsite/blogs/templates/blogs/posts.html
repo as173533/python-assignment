@@ -1,200 +1,36 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>All Blog Posts</title>
-    <style>
-        :root {
-            --page-bg: #f4efe8;
-            --paper: rgba(255, 250, 242, 0.88);
-            --ink: #1f2b3a;
-            --muted: #607080;
-            --accent: #b5542f;
-            --accent-soft: rgba(181, 84, 47, 0.12);
-            --card-border: rgba(31, 43, 58, 0.1);
-            --shadow: 0 22px 45px rgba(31, 43, 58, 0.12);
-        }
+{% extends "base.html" %}
 
-        * {
-            box-sizing: border-box;
-        }
+{% block page_title %}All Blog Posts{% endblock %}
+{% block body_class %}posts-page{% endblock %}
 
-        body {
-            margin: 0;
-            min-height: 100vh;
-            font-family: "Trebuchet MS", "Segoe UI", sans-serif;
-            color: var(--ink);
-            background:
-                radial-gradient(circle at top right, rgba(181, 84, 47, 0.22), transparent 24%),
-                radial-gradient(circle at bottom left, rgba(74, 125, 110, 0.18), transparent 22%),
-                linear-gradient(180deg, #fbf7f2 0%, #f1e8db 100%);
-        }
-
-        .shell {
-            width: min(1120px, calc(100% - 32px));
-            margin: 0 auto;
-            padding: 56px 0 72px;
-        }
-
-        .hero {
-            margin-bottom: 34px;
-            padding: 28px;
-            border-radius: 28px;
-            background: linear-gradient(135deg, rgba(255, 250, 242, 0.95), rgba(247, 236, 224, 0.82));
-            border: 1px solid rgba(31, 43, 58, 0.08);
-            box-shadow: var(--shadow);
-        }
-
-        .eyebrow {
-            display: inline-block;
-            padding: 8px 14px;
-            border-radius: 999px;
-            background: var(--accent-soft);
-            color: var(--accent);
-            font-size: 0.84rem;
-            font-weight: 700;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-        }
-
-        h1 {
-            margin: 14px 0 10px;
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: clamp(2.2rem, 5vw, 4.4rem);
-            line-height: 0.98;
-        }
-
-        .hero p {
-            max-width: 720px;
-            margin: 0;
-            color: #43515f;
-            font-size: 1.06rem;
-            line-height: 1.8;
-        }
-
-        .stats {
-            margin-top: 18px;
-            color: var(--muted);
-            font-weight: 700;
-        }
-
-        .post-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 22px;
-        }
-
-        .post-card {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            padding: 24px;
-            border-radius: 24px;
-            background: var(--paper);
-            border: 1px solid var(--card-border);
-            text-decoration: none;
-            color: inherit;
-            box-shadow: var(--shadow);
-            backdrop-filter: blur(10px);
-            transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
-        }
-
-        .post-card:hover {
-            transform: translateY(-6px);
-            border-color: rgba(181, 84, 47, 0.28);
-            box-shadow: 0 28px 52px rgba(31, 43, 58, 0.16);
-        }
-
-        .post-card-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            color: var(--muted);
-            font-size: 0.92rem;
-        }
-
-        .post-category {
-            padding: 6px 10px;
-            border-radius: 999px;
-            background: rgba(74, 125, 110, 0.12);
-            color: #2f6f63;
-            font-weight: 700;
-        }
-
-        .post-card h2 {
-            margin: 0;
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: 1.65rem;
-            line-height: 1.15;
-        }
-
-        .post-card p {
-            margin: 0;
-            color: #41505d;
-            line-height: 1.75;
-            flex-grow: 1;
-        }
-
-        .post-card-footer {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            color: var(--accent);
-            font-weight: 700;
-        }
-
-        .arrow {
-            font-size: 1.2rem;
-        }
-
-        @media (max-width: 640px) {
-            .shell {
-                width: min(100% - 20px, 1120px);
-                padding: 20px 0 40px;
-            }
-
-            .hero {
-                padding: 22px;
-                border-radius: 22px;
-            }
-
-            .post-card {
-                padding: 20px;
-                border-radius: 20px;
-            }
-        }
-    </style>
-</head>
-<body>
+{% block body_content %}
     <main class="shell">
         <section class="hero">
             <span class="eyebrow">Blog Library</span>
             <h1>Explore every post in one place.</h1>
             <p>
-                Each blog is rendered dynamically from the view context. Add or update a post in Python,
-                and this page will automatically refresh the grid.
+                Approved posts appear here after an admin reviews them. Logged-in users can submit
+                new posts from the front end.
             </p>
             <p class="stats">{{ total_posts }} posts available</p>
+            <div class="hero-actions">
+                {% if user.is_authenticated %}
+                    <a class="button-primary" href="{% url 'create-post' %}">Write a post</a>
+                {% else %}
+                    <a class="button-primary" href="{% url 'login' %}">Login to write</a>
+                {% endif %}
+            </div>
         </section>
 
         <section class="post-grid">
             {% for post in posts %}
-                <a class="post-card" href="{{ post.url }}">
-                    <div class="post-card-header">
-                        <span class="post-category">{{ post.category }}</span>
-                        <span>{{ post.reading_time }}</span>
-                    </div>
-                    <h2>{{ post.title }}</h2>
-                    <p>{{ post.summary }}</p>
-                    <div class="post-card-footer">
-                        <span>Read post</span>
-                        <span class="arrow">&#8594;</span>
-                    </div>
-                </a>
+                {% include "blogs/includes/post_card.html" with post=post only %}
+            {% empty %}
+                <div class="empty-state">
+                    <h2>No approved posts yet</h2>
+                    <p>New posts will appear here after the admin approves them.</p>
+                </div>
             {% endfor %}
         </section>
     </main>
-</body>
-</html>
+{% endblock %}
