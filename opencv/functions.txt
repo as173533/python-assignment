@@ -1,0 +1,21 @@
+#Removes the pixels on the foreground objects (EROSION)
+cv2.erode()
+
+#Add Pixels (DILATION)
+cv2.dilate()
+
+#OPENING (EROSION FOLLOWED BY DILATION)
+cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
+
+#CLOSING (Dilation if followed by EROSION)
+cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)
+
+#MORPHOLOGICAL GRADIENT (Difference Between Dilation & Erosion)
+cv2.morphologyEx(img, cv2.MORPH_GRADIENT, kernel)
+
+#TOP HAT (Difference Between Input Image & Opening of Image)
+cv2.morphologyEx(img, cv2.MORPH_TOPHAT, kernel)
+
+#BLACK HAT (Difference Between Closing Input Image & the input Image)
+cv2.morphologyEx(img, cv2.MORPH_BLACKHAT, kernel)
+
